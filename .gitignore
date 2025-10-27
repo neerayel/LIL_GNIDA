@@ -1,0 +1,8 @@
+# ignore .env file to prevent leaking actual data
+.env
+
+# ignore all log files just because
+*.log
+
+# ignore python cache files
+__pycache__/
