@@ -15,7 +15,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Доступ запрещен.")
         return
     keyboard = get_main_menu_keyboard()
-    await update.message.reply_text(reply_markup=keyboard)
+    await update.message.reply_text("BENIS", reply_markup=keyboard)
 
 async def button_click_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обрабатывает нажатия на все инлайн-кнопки."""
