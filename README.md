@@ -10,3 +10,4 @@ If you have an error installing pydantic on termux > run this:
 3) pkg install build-essential
 4) python -m pip install pydantic
 5) python -m pip install fastapi
+(not guarantied, but worked for me)
