@@ -1,0 +1,1 @@
+cmd /k .venv\Scripts\python.exe src\lil_gnida\main.py

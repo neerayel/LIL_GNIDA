@@ -17,6 +17,7 @@ isort==7.0.0
 multidict==6.7.0
 mypy==1.18.2
 mypy_extensions==1.1.0
+ollama==0.6.1
 packaging==25.0
 pathspec==0.12.1
 platformdirs==4.5.0
