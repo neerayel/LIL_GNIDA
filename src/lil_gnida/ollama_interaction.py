@@ -1,10 +1,11 @@
-from ollama import chat
-from ollama import ChatResponse
+from ollama import AsyncClient, chat, ChatResponse
+import ollama
 import json
 from config import settings
+  
 
 # Обработка inline запроса; 1 неизменный system промт
-def llm_process_single(message):
+async def llm_process_single(message):
   inputData = read_json_data(settings.ollama_single_input_json_path)
   input_message = {
         "content": message,
@@ -12,8 +13,11 @@ def llm_process_single(message):
     }
   inputData.append(input_message)
 
-  response: ChatResponse = chat(model=settings.ollama_inline_model, messages=inputData)
-  return str(response.message.content)
+  options = {
+    'temperature': 0
+  }
+  
+  return await AsyncClient(settings.ollama_server_base_url).chat(model=settings.ollama_inline_model, messages=inputData, options=options)
 
 
 # Обработка сообщения из чата; 1 неизменный system промт + история чата

@@ -42,14 +42,14 @@ async def inline_interaction_handler(update: Update, context: ContextTypes.DEFAU
     await is_user_allowed(update, context)
     query = update.inline_query.query
     
-    llmReply = llm_process_single(query)
+    llmResponse = await llm_process_single(query)
     results = []
     results.append(
         InlineQueryResultArticle(
             id=str(uuid4()),
             title='Переписал твою хуйню на внятном лангуаге:',
-            description=llmReply,
-            input_message_content=InputTextMessageContent(message_text=llmReply)
+            description=llmResponse.message.content,
+            input_message_content=InputTextMessageContent(message_text=llmResponse.message.content)
         )
     )
     await context.bot.answer_inline_query(update.inline_query.id, results, is_personal=True, cache_time=context.bot_data["settings"].inline_cache_time)

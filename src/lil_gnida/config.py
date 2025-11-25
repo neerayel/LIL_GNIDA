@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     inline_cache_time: int = 10
     
     target_server_base_url: str = "http://localhost:8080"
+    ollama_server_base_url: str = "http://localhost:8080"
+
     request_timeout: int = 30
 
     ollama_inline_model: str = ""
