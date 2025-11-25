@@ -1,8 +1,10 @@
+import logging
 from ollama import AsyncClient, chat, ChatResponse
-import ollama
 import json
 from config import settings
   
+
+logger = logging.getLogger(__name__)
 
 # Обработка inline запроса; 1 неизменный system промт
 async def llm_process_single(message):
@@ -14,7 +16,7 @@ async def llm_process_single(message):
   inputData.append(input_message)
 
   options = {
-    'temperature': 0
+    'temperature': 0 # max -> 1.5
   }
   
   return await AsyncClient(settings.ollama_server_base_url).chat(model=settings.ollama_inline_model, messages=inputData, options=options)

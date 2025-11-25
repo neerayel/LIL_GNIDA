@@ -6,23 +6,8 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Inli
 from telegram.error import TelegramError
 
 # Импортируем наши модули
-from config import settings
+from config import settings, setup_logging
 from handlers import start, button_click_handler, inline_interaction_handler
-
-
-def setup_logging() -> None:
-    """Настройка структурированного логирования"""
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO,
-        handlers=[
-            logging.FileHandler('bot.log', encoding='utf-8'),
-            logging.StreamHandler()
-        ]
-    )
-    # Уменьшаем логирование от некоторых библиотек
-    logging.getLogger('httpx').setLevel(logging.WARNING)
-    logging.getLogger('httpcore').setLevel(logging.WARNING)
 
 
 def create_application() -> Application:

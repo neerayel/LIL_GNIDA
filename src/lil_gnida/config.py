@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from typing import List
+import logging
 
 class Settings(BaseSettings):
     telegram_bot_token: str = ""
@@ -25,3 +26,18 @@ class Settings(BaseSettings):
 
 # Создаем экземпляр настроек
 settings = Settings()
+
+
+def setup_logging() -> None:
+    """Настройка структурированного логирования"""
+    logging.basicConfig(
+        format='%(asctime)s\t||\t%(name)s\t||\t%(levelname)s\t||\t%(message)s',
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler('bot.log', encoding='utf-8'),
+            logging.StreamHandler()
+        ]
+    )
+    # Уменьшаем логирование от некоторых библиотек
+    logging.getLogger('httpx').setLevel(logging.WARNING)
+    logging.getLogger('httpcore').setLevel(logging.WARNING)
