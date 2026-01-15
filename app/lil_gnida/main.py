@@ -1,13 +1,10 @@
-import logging
-import asyncio
-from typing import NoReturn
-
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, InlineQueryHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, InlineQueryHandler, MessageHandler
 from telegram.error import TelegramError
 
-# Импортируем наши модули
+import logging
 from config import settings, setup_logging
-from handlers import start, button_click_handler, inline_interaction_handler
+# from app.redis.connection import setup_redis_connection
+from handlers import start, button_click_handler, inline_interaction_handler, chat_handler
 
 
 def create_application() -> Application:
@@ -22,19 +19,22 @@ def create_application() -> Application:
     
     # Добавляем обработчики команд
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", start))
     
     # Добавляем обработчик нажатий на кнопки
     application.add_handler(CallbackQueryHandler(button_click_handler))
 
+    # Добавляем обработчик inline-запросов
     application.add_handler(InlineQueryHandler(inline_interaction_handler))
+    
+    # Добавляем обработчик чата
+    application.add_handler(MessageHandler(None, chat_handler))
     
     # Добавляем обработчик ошибок
     # application.add_error_handler(error_handler)
     
     # Сохраняем настройки в bot_data для доступа из handlers
     application.bot_data["settings"] = settings
-    application.bot_data["logger"] = logging.getLogger(__name__)
+    # application.bot_data["redis"] = setup_redis_connection()
     
     return application
 
@@ -52,8 +52,6 @@ if __name__ == "__main__":
         application = create_application()
 
         logger.info("Бот успешно инициализирован. Запускаем polling...")
-        # logger.info(f"Разрешены пользователи: {settings.allowed_user_ids}")
-        # logger.info(f"Целевой сервер: {settings.target_server_base_url}")
 
         application.run_polling(
             allowed_updates=['message', 'callback_query', 'inline_query'],
@@ -62,14 +60,10 @@ if __name__ == "__main__":
         )
         
     except TelegramError as e:
-        logger.error(f"Ошибка Telegram API: {e}")
-        raise
-    except Exception as e:
-        logger.critical(f"Критическая ошибка при запуске бота: {e}")
-        raise
+        logger.error("Ошибка Telegram API: "+ str(e))
     except KeyboardInterrupt:
-        logging.getLogger(__name__).info("Бот остановлен пользователем (Ctrl+C)")
+        logger.info("Бот остановлен в консоли (Ctrl+C)")
     except Exception as e:
-        logging.getLogger(__name__).critical(f"Бот аварийно завершил работу: {e}")
+        logger.critical("Бот аварийно завершил работу: " + str(e))
         exit(1)
 
