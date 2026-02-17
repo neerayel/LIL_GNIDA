@@ -16,7 +16,7 @@ async def ollama_processer(settings, chat_model, input_data, options):
   try:
     response = await AsyncClient(ollama_server).chat(model=chat_model, messages=input_data, options=options)
   except Exception as e:
-    logger.exception("Ошибка при обращении к ollama -> " + str(e))
+    logger.exception("Ошибка при обращении к ollama")
   return response
 
 
